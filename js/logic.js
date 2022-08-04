@@ -1,158 +1,149 @@
-let selectBeer; //VARIABLE CREADA PARA INCORPORAR LA VARIABLE BEER QUE INDICA LA CERVEZA SELECCIONADA, DENTRO DE LOS CASE EN SWITCH Y DE QUE DE ESE MODO FUNCIONEN LAS CONCATENACIONES DE LOS ALERT DENTRO DE LAS FUNCIONES littersOfBottle() Y barrelLiters()
-let amount; // En esta variable guardaremos la cantidad de botellas que se pediran en caso de seleccionar botellas como envase y en caso de barriles, cuantos barriles (no hablamos de litros)
-let liters; //Variable para saber los Litros en los que esta interesado el comprador
-let question; //Sabremos si el comprador quiere seguir agregando al carrito o si desea terminar la compra, esta relacionado a la variable Validation que dependiendo su valor terminara o no la compra
-let container; //Almacenaremos la informacion relacionada a cual envase le interesa al comprador, que puede ser Barril o Botella
-let stock; //Es una variable creada para incluir en cada Case del bucle switch y asi dependiendo la verveza seleccionada, stock valdra lo que valga el stock de esa cerveza, y asi podremos incluir un stock personalizado de cada cerveza en nuestras funciones
-let validation = 1; // Cuando su valor es igual a 1 el while donde se puede realizar compras seguira funcionando, si su valor mediante la variable Question se modifica a 0, el bucle while termina y con el tambien la compra
-
-//ESTAS VARIABLES CORRESPONDEN AL STOCK DE CADA CERVEZA POR SEPARADO
-let stockScottish=1000;
-let stockGolden=700;
-let stockDoradaPampeana=1200;
-let stockPorter=2000;
-let stockIpa=1500;
-
-//EN ESTE FRAGMENTO DE CODIGO MOSTRAMOS POR CONSOLA CUAL ES EL STOCK DE CERVEZAS EN LA FABRICA
-console.log("STOCK");
-console.log("Scottish: "+stockScottish+"lts.");
-console.log("Golden: "+stockGolden+"lts.");
-console.log("Dorada Pampeana: "+stockDoradaPampeana+"lts.");
-console.log("Porter: "+stockPorter+"lts.");
-console.log("Ipa: "+stockIpa+"lts.");
-
-//En esta funcion trabajamos en caso que el cliente halla seleccionado como envase Botellas, el parametro howMuch toma el valor de Amount y con este valor calculamos cuantos litros se pidieron
-//y comparamos con los litros en stock para saber si la compra se puede o no realizar
-function litersOfBottle(howMuch){
-    if((parseInt(howMuch)*6)/2<stock){
-        stock-=(parseInt(howMuch)*6)/2;
-        return alert("Usted a adquirido "+ parseInt(howMuch)*6 + " botellas de 500ml de " +selectBeer.toUpperCase()+" equivalente a: "+ (parseInt(howMuch)*6)/2 + " litros totales. \nMuchas gracias por su compra! Hasta luego!");
+//Creamos una clase constructora para crear objetos de cada tipo de cerveza con propiedades que equivalgan al valor y al stock de cada cerveza
+class BeerPrice {
+    constructor(price, stock){
+        this.price = price;
+        this.stock = stock;
+        this.talk = function(){alert(this.typeBeer+" = "+this.price)}
     }
-    else{return alert("No tenemos stock para cubrir su demanda, lo sentimos, en este momento contamos con " + stock +"lts y usted requiere de " + (parseInt(howMuch)*6)/2) +"lts"}
 }
 
-//En esta funcion trabajamos en caso que el cliente halla seleccionado como envase Barriles, el parametro howMuch toma el valor de Amount y con este valor calculamos cuantos litros se pidieron
-//y comparamos con los litros en stock para saber si la compra se puede o no realizar
-function barrelLiters(howMuch){
-    if(parseInt(howMuch)*parseInt(liters)<stock){
-        stock-=parseInt(howMuch)*parseInt(liters);
-        return alert("Usted a adquirido "+howMuch+" barriles de "+ liters + "lts de "+selectBeer.toUpperCase()+ " equivalentes a " +(parseInt(liters)*parseInt(howMuch))+"lts\nMuchas gracias por su compra! Hasta luego!");
-    }
-    else{return alert("No tenemos stock para cubrir su demanda, lo sentimos, en este momento contamos con " + stock +"lts y usted requiere de " + parseInt(howMuch)*parseInt(liters) +"lts")}
-}
+//Creamos los Objetos para las cervezas Embotelladas
+const scottishTwelveBeers = new BeerPrice(2932,true);
+const goldenTwelveBeers = new BeerPrice(2808,true);
+const doradaPampeanaTwelveBeers = new BeerPrice(2652,true);
+const porterTwelveBeers = new BeerPrice(2932,true);
+const ipaTwelveBeers = new BeerPrice(3026,true);
 
-//En esta funcion definimos cual envase vamos a usar, sea Botella o Barril y pedimos al cliente que indique cuantas unidades va a querer y en caso de los barriles 
-//indicamos cuantas unidades va a querer y de que litraje de barril.
-//Dentro de esta funcion tambien invocamos a las funciones litersOfBottle y barrelLiters
-function orderForm(){
-    container = prompt("Cual envase precisa?\n Botella o Barril");
-    if (container == "botella" || container =="Botella" || container == "BOTELLA" || container == "botellas" || container =="Botellas" || container == "BOTELLAS"){
-        amount = prompt("Cuantos pack de 6 botellas desea adquirir?\nLas botellas se adquieren en pack de 6 botellas, indique cuantos packs desea:");
-        litersOfBottle(amount);
+//Creamos los Objetos para las cervezas Embarriladas en 20lts
+const scottishBarrel20 = new BeerPrice(4000,true);
+const goldenBarrel20 = new BeerPrice(3200,true);
+const doradaPampeanaBarrel20 = new BeerPrice(3100,true);
+const porterBarrel20 = new BeerPrice(4300,true);
+const ipaBarrel20 = new BeerPrice(5000,true);
+
+//Creamos los Objetos para las cervezas Embarriladas en 30lts
+const scottishBarrel30 = new BeerPrice(5900,true);
+const goldenBarrel30 = new BeerPrice(5900,true);
+const doradaPampeanaBarrel30 = new BeerPrice(4600,true);
+const porterBarrel30 = new BeerPrice(6400,true);
+const ipaBarrel30 = new BeerPrice(7400,true);
+
+//Creamos los Objetos para las cervezas Embarriladas en 50lts
+const scottishBarrel50 = new BeerPrice(9800,true);
+const goldenBarrel50 = new BeerPrice(7800,true);
+const doradaPampeanaBarrel50 = new BeerPrice(7650,true);
+const porterBarrel50 = new BeerPrice(10600,true);
+const ipaBarrel50 = new BeerPrice(12300,true);
+
+//ARRAYS para contener los objetos de cada cerveza separados por estilo conteniendo cada lista las diferentes medidas de embazado 
+const scottish=[scottishTwelveBeers.price, scottishBarrel20.price, scottishBarrel30.price, scottishBarrel50.price];
+const golden=[goldenTwelveBeers.price, goldenBarrel20.price, goldenBarrel30.price, goldenBarrel50.price];
+const doradaPampeana=[doradaPampeanaTwelveBeers.price, doradaPampeanaBarrel20.price, doradaPampeanaBarrel30.price, doradaPampeanaBarrel50.price];
+const porter=[porterTwelveBeers.price, porterBarrel20.price, porterBarrel30.price, porterBarrel50.price];
+const ipa=[ipaTwelveBeers.price, ipaBarrel20.price, ipaBarrel30.price, ipaBarrel50.price];
+
+let toBuy = true; //Mientras esta variable sea true el comprador podrá agregar al carrito, cuando el comprador decida no comprar mas, se hará false
+let container; //Declaramos la variable que define si el envase sera Botella o Barril
+let amount; //Declaramos la variable que define la cantidad de unidades que encargara el cliente
+let liters; //Declaramos la variable que determinara de cuantos litros sera el barril a pedir
+let beer; //Declaramos la variable que define que tipo de cerveza se comprara
+let questions; //Declaramos la variable que definirá si el cliente desea seguir comprando o no
+let total=0; //En la variable total es donde almacenaremos el precio final de la compra
+
+const trolley = []; // En esta lista vacía iremos agregando los productos que se irán agregando al carrito
+
+
+
+alert("Bienvenido a Rosesther\nTenemos para ofrecerte distintos estilos de cervezas"); //Bienvenida al sitio
+
+//Función para seleccionar el envase y la cantidad de unidades a comprar
+function beerContainer(howBeer){ //Utilizo una función con parámetro para poder asi reemplazar su valor por el de la cerveza elegida y de ella poder agregar a la lista trolley
+    alert("Buena elección! Estamos cada vez mas cerca.\nAhora indícanos que envase te interesa adquirir.");
+    container = prompt("¿Botella o Barril?").toUpperCase();
+    if(container=="BOTELLA"||container=="BOTELLAS"){
+        alert("Ten en cuenta que las botellas se compran en packs y cada pack contiene doce botellas de 500ml");
+        amount = parseInt(prompt("Cuantos packs deseas?"));
+        trolley.push({style:amount + " unidades de 12 "+beer +" en Botellas de 500ml" , priceBuy:howBeer[0]*amount}); //agregamos a la lista trolley dos calves "style" y "priceBuy" para utilizarlas luego
+        alert("Has adquirido "+amount*6+"lts de "+beer+" en botellas de 500ml\nEl precio total es de: $"+howBeer[0]*amount);
     }
-    else if(container == "barril" || container =="Barril" || container == "BARRIL" || container == "barriles" || container =="Barriles" || container == "BARRILES"){
-        liters = prompt ("Cuantos litros desea?\nBarriles de: 20lts, 30lts y 50lts\nIndique solo el numero SIN LA UNIDAD");
-        if(parseInt(liters)==20||parseInt(liters)==30||parseInt(liters)==50){
-            amount = prompt ("Cuantos barriles desea adquirir?");
-            barrelLiters(amount);
-        }
-        else{
-            alert("No poseemos barriles con los litros que a indicado");
+    else if(container=="BARRIL"||container=="BARRILES"){
+        alert("Perfecto!!! Tenemos tres medidas de barriles:\n20lts | 30lts | 50lts");
+        liters = parseInt(prompt("20 | 30 | 50\nNO indique la unidad SOLO el numero"));
+        amount = parseInt(prompt("Cuantos barriles de "+ liters +"lts deseas?"));
+        switch(liters){
+            case 20:
+                trolley.push({style:amount + " unidades de " +beer+" en Barril de 20lts" , priceBuy: howBeer[1]*amount});
+            alert("Has adquirido "+amount*liters+"lts de "+beer+"en barriles de 20lts\nEl precio total es de: $"+howBeer[1]*amount);
+            break;
+            case 30:
+                trolley.push({style:amount+" unidades de "+ beer+" en Barril de 30lts" , priceBuy: howBeer[2]*amount});
+                alert("Has adquirido "+amount*liters+"lts de "+beer+"en barriles de 30lts\nEl precio total es de: $"+howBeer[2]*amount);
+                break;
+            case 50:
+                trolley.push({style:amount+" unidades de "+ beer+" en Barril de 50lts" , priceBuy: howBeer[3]*amount});
+                alert("Has adquirido "+amount*liters+"lts de "+beer+"en barriles de 50lts\nEl precio total es de: $"+howBeer[3]*amount);
+                break;
+            default:
+                alert("No has ingresado una unidad de Barril correcta según lo indicado");
         }
     }
     else{
-        alert ("El envase ingresado NO corresponde al catalogo");
+        alert("No poseemos este envase en nuestro catalogo");
     }
 }
 
-
-
-//El valor del bucle while sera distinto de 1 cuando pasemos como valor a la variable question "0" y ahi terminara el bucle
-while (validation == 1){
-
-    let beer = prompt("Indícanos cual cerveza te acompañara:\nMenu de Rosesther: \nScottish | Golden | Dorada Pampeana | Porter | Ipa");
-
+//Creamos una función para preguntar si se desea seguir comprando o no y dependiendo la respuesta, la variable declarada toBuy cambiara a false
+function nextPurchase(){
+    do{
+        questions = prompt("Desea seguir agregando al carrito?\nSI | NO").toUpperCase();
+        if(questions=="SI"){
+            toBuy=true;
+        }
+        else if(questions=="NO"){
+            toBuy=false;
+        }
+        else{
+            alert("La respuesta no es valida. Vuelva a intentarlo");
+        }
+    }
+    while(questions!="SI" && questions!="NO");
+}
+//En este bucle pedimos el estilo de cerveza y en base a la elección mediante un switch se ejecutaran las funciones correspondientes con sus valores personalizados
+do{
+    beer = prompt("Indícanos que cerveza deseas adquirir:\nScottish | Golden | Dorada Pampeana | Porter | Ipa").toUpperCase();
     switch(beer){
-        case "scottish":
         case "SCOTTISH":
-        case"Scottish":
-        selectBeer = beer;
-        stock = stockScottish;
-        orderForm();
-        stockScottish = stock;
-        break;
-
-        case "golden":
+            beerContainer(scottish);
+            nextPurchase();
+            break;
         case "GOLDEN":
-        case"Golden":
-        selectBeer = beer;
-        stock = stockGolden;
-        orderForm();
-        stockGolden = stock;
-        break;
-    
-
-        case "dorada pampeana":
+            beerContainer(golden);
+            nextPurchase();
+            break;
         case "DORADA PAMPEANA":
-        case "Dorada Pampeana":
-        case"Dorada pampeana":
-        selectBeer = beer;
-        stock = stockDoradaPampeana;
-        orderForm();
-        stockDoradaPampeana = stock;
-        break;
-
-        case "porter":
+            beerContainer(doradaPampeana);
+            nextPurchase();
+            break;
         case "PORTER":
-        case"Porter":
-        selectBeer = beer;
-        stock = stockPorter;
-        orderForm();
-        stockPorter = stock;
-        break;
-
-        case "ipa":
+            beerContainer(porter);
+            nextPurchase();
+            break;
         case "IPA":
-        case"Ipa":
-        selectBeer = beer;
-        stock = stockIpa;
-        orderForm();
-        stockIpa = stock;
-        break;
-
+            beerContainer(ipa);
+            nextPurchase();
+            break;
         default:
             alert("Esta cerveza no forma parte de nuestro catalogo");
             break;
     }
-    question = parseInt(prompt("Si desea seguir agregando al carrito pulse '1' si desea terminar su compra pulse '0'"));
-    if(question==1){
-        validation = question;
-    }
-    else if(question == 0){
-        validation = question;
-        alert("Su compra a finalizado, desde Rosesther te decimos, Salud!");
-    }
-    else{
-        alert("Solo se permite responder '1' o '0'");
-    }
+}
+while(toBuy);
+
+//Ejecutamos un For ... Of que muestre los productos adquiridos y sus precios por separado
+for (list of trolley){
+    console.log("Productos comprados:\n"+list.style+" = $"+list.priceBuy);
+    total = total + list.priceBuy;
 }
 
-
-//Mostramos por consola la actualización del Stock siendo que ahora el comprador a consumido productos.
-console.log("ACTUALIZACIÓN DE STOCK")
-console.log("Scottish: "+stockScottish+"lts.");
-console.log("Golden: "+stockGolden+"lts.");
-console.log("Dorada Pampeana: "+stockDoradaPampeana+"lts.");
-console.log("Porter: "+stockPorter+"lts.");
-console.log("Ipa: "+stockIpa+"lts.");
-
-//Realizamos un muestrario del catalogo de la cerveceria antes de finalizar la compra
-let products = ["Scottish","Golden","Dorada Pampeana","Porter","Ipa"]
-
-for (let i = 0 ; i<5 ; i++){
-    alert("Entre nuestros productos también puede encontrar " + products[i]);
-    do{
-        alert(products[i].toUpperCase());
-    }
-    while(i>5)
-}
+//Mostramos el precio total de la compra
+alert("El costo total de tu compra es de: $"+ total);
