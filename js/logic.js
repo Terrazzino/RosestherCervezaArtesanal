@@ -104,8 +104,8 @@ function nextPurchase(){
 
 const noStock = trolley.filter((stockValidation)=>stockValidation.stock<0);//Utilizamos filter() para colocar en el array noStock todas las cervezas que quedaron en stock negativo
 //Utilizamos forEach() para mostrar por consola cuales son las cervezas que el vendedor tendrá que reponer para cubrir la demanda
-noStock.forEach((noStockList)=>{console.log("Reponer Stock de:"); 
-console.table(noStockList)}
+console.log("Reponer Stock de:");
+noStock.forEach((noStockList)=>{console.table(noStockList)}
 );
 const total = trolley.reduce((acumulador,priceBeer)=>acumulador + priceBeer.priceBeer,0); //Utilizamos un reduce() para calcular el total de la compra
 const day = new Date;
