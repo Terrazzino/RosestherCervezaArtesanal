@@ -61,7 +61,7 @@ function beerContainer(howBeer){
         amount = parseInt(prompt("🍻Las botellas se encargan en packs de 12 botellas\nCuantos packs desea adquirir?"));//cantidad de packs(botellas)
         howBeer.stock-=amount/2;
         trolley.push({style:beer,priceBeer:howBeer.bottle500*amount,stock:howBeer.stock});
-        alert("Usted a encargado "+amount*12+" botellas de "+beer+" equivalentes a "+ amount/2 +"lts\nPRECIO: $"+ howBeer.bottle500);
+        alert("Usted a encargado "+amount*12+" botellas de "+beer+" equivalentes a "+ amount/2 +"lts\nPRECIO: $"+ howBeer.bottle500*amount);
     }
     else if (container == "BARRIL" || container == "BARRILES"){
         liters = parseInt(prompt("🍻Elija uno de los barriles de nuestro catalogo:\n20lts | 30lts | 50lts\nSOLO INDIQUE EL NUMERO NO LA UNIDAD"));//cual barril?
@@ -70,16 +70,17 @@ function beerContainer(howBeer){
             case 20:
                 howBeer.stock-=amount*20;
                 trolley.push({style:beer,priceBeer:howBeer.barrel20*amount,stock:howBeer.stock});
-                alert("Usted a encargado "+amount+" barril/es de "+beer+" equivalentes a "+ amount*20 +"lts\nPRECIO: $"+ howBeer.barrel20);
+                alert("Usted a encargado "+amount+" barril/es de "+beer+" equivalentes a "+ amount*20 +"lts\nPRECIO: $"+ howBeer.barrel20*amount);
                 break;
             case 30:
                 howBeer.stock-=amount*30;
                 trolley.push({style:beer,priceBeer:howBeer.barrel30*amount,stock:howBeer.stock});
-                alert("Usted a encargado "+amount+" barril/es de "+beer+" equivalentes a "+ amount*30 +"lts\nPRECIO: $"+ howBeer.barrel30);
+                alert("Usted a encargado "+amount+" barril/es de "+beer+" equivalentes a "+ amount*30 +"lts\nPRECIO: $"+ howBeer.barrel30*amount);
                 break;
             case 50:
                 howBeer.stock-=amount*50;
-                alert("Usted a encargado "+amount+" barril/es de "+beer+" equivalentes a "+ amount*50 +"lts\nPRECIO: $"+ howBeer.barrel50);
+                trolley.push({style:beer,priceBeer:howBeer.barrel30*amount,stock:howBeer.stock});
+                alert("Usted a encargado "+amount+" barril/es de "+beer+" equivalentes a "+ amount*50 +"lts\nPRECIO: $"+ howBeer.barrel50*amount);
                 break;
             default:
                 alert("No es valida esta unidad de medida.\nRecuerde que solo tenemos de 20,30 y 50lts y\nque no se debe incluir la unidad lts, solo el numero")
@@ -103,10 +104,9 @@ function nextPurchase(){
 
 const noStock = trolley.filter((stockValidation)=>stockValidation.stock<0);//Utilizamos filter() para colocar en el array noStock todas las cervezas que quedaron en stock negativo
 //Utilizamos forEach() para mostrar por consola cuales son las cervezas que el vendedor tendrá que reponer para cubrir la demanda
-console.log("LISTA DE STOCK EN ROJO:");
-noStock.forEach((noStockList)=>{
-    console.table(noStockList)});
-
-const total = trolley.reduce((acumulador,price)=>acumulador + price.priceBeer,0); //Utilizamos un reduce() para calcular el total de la compra
+noStock.forEach((noStockList)=>{console.log("Reponer Stock de:"); 
+console.table(noStockList)}
+);
+const total = trolley.reduce((acumulador,priceBeer)=>acumulador + priceBeer.priceBeer,0); //Utilizamos un reduce() para calcular el total de la compra
 const day = new Date;
 alert("Costo total de: $"+total+"\nSu compra se realizo con éxito hoy: "+ day.toLocaleDateString()); //en el parte del total de la compra incluimos la fecha en que se realizo
