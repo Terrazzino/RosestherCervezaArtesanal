@@ -7,6 +7,14 @@ let question; //Esta variable contendrá la respuesta de si quiere o no seguir a
 
 const trolley = []; //Esta lista contendrá todos los productos que se agreguen al carrito
 
+let congratulation = document.createElement("div"); //Creamos un elemento mediante el DOM donde podemos registrar que la compra se a realizado con exito y el precio total con la fecha de compra
+congratulation.className = "mx-auto text-center text-success"; //Definimos las clases de el elemento creado
+document.body.append(congratulation); //Agregamos el elemento creado a su Padre
+
+let listProducts = document.createElement("div"); //Creamos un div con el DOM para mostrar los productos comprados
+listProducts.className = "mx-auto text-center text-dark"; //Le agregamos las clases al elemento creado
+document.body.append(listProducts); //Agregamos la lista de productos como hijo del body
+
 //Creamos una clase constructora donde pasamos como propiedades el precio de cata medida de cerveza y su stock
 class BeerPrice {
     constructor(price500ml, price20lts, price30lts, price50lts, stock){
@@ -109,4 +117,34 @@ noStock.forEach((noStockList)=>{console.table(noStockList)}
 );
 const total = trolley.reduce((acumulador,priceBeer)=>acumulador + priceBeer.priceBeer,0); //Utilizamos un reduce() para calcular el total de la compra
 const day = new Date;
-alert("Costo total de: $"+total+"\nSu compra se realizo con éxito hoy: "+ day.toLocaleDateString()); //en el parte del total de la compra incluimos la fecha en que se realizo
+// alert("Costo total de: $"+total+"\nSu compra se realizo con éxito hoy: "+ day.toLocaleDateString()); //en el parte del total de la compra incluimos la fecha en que se realizo
+congratulation.innerHTML=`
+    <div class="bg-white mx-auto" style="width:max-content">
+        <b class="fs-4">Felicidades, su compra se ha realizado con éxito.</b><br>
+        <p>Costo total: $${total}</p><br>
+        <p>Fecha de la compra: ${day.toLocaleDateString()}</p><br>
+    </div>`;
+
+listProducts.innerHTML = `<b class="bg-dark text-white" style="width:max-content">LISTA DE PRODUCTOS</b>`;
+for (let buyReady of trolley){
+    listProducts.innerHTML+=`<p class="bg-white mx-auto text-center" style="width:max-content"><b>${buyReady.style}</b> = ${buyReady.priceBeer}</p><br>`
+}
+
+//CREAMOS MEDIANTE EL DOM 4 CARDS QUE REPRESENTAN LOS 4 TIPOS DE CONTAINER QUE LA EMPRESA OFRECE
+//El Plan es luego mediante eventos, al hacer click en uno de ellos, abrir un formulario y que la compra se agregue al carrito
+
+let body = document.getElementsByTagName("body");
+let products = document.createElement("div");
+const allProducts = [["Botella 500cc","bottle500.jpeg"],["Barril 20lts","barrel20.jpeg"],["Barril 30lts","barrel30.jpeg"],["Barril 50lts","barrel50.jpeg"]];
+products.className = "d-flex flex-row justify-content-evenly m-3";
+for(const pro of allProducts){
+    products.innerHTML+=`
+    <div class="card" style="width: 18rem;">
+    <img src="../assets/img/container/${pro[1]}" class="card-img-top" alt="${pro[0]}">
+    <div class="card-body">
+      <h5 class="card-title">${pro[0]}</h5>
+      <a href="#" class="btn btn-primary">QUIERO!</a>
+    </div>
+  </div>`;
+}
+document.body.append(products);
