@@ -34,34 +34,34 @@ const porter = new BeerPrice(2932,4300,5900,10600,500);
 const ipa = new BeerPrice(3026,5000,7400,12300,500);
 
 //Bucle donde pediremos al usuario que seleccione la cerveza a comprar y en base a esta se ejecutaran las funciones correspondientes hasta que el usuario decida terminar el ciclo
-do{
-    beer = prompt("Indícanos que cerveza deseas adquirir:\nScottish | Golden | Dorada Pampeana | Porter | Ipa").toUpperCase();
-    switch(beer){
-        case "SCOTTISH":
-            beerContainer(scottish);
-            nextPurchase();
-            break;
-        case "GOLDEN":
-            beerContainer(golden);
-            nextPurchase();
-            break;
-        case "DORADA PAMPEANA":
-            beerContainer(doradaPampeana);
-            nextPurchase();
-            break;
-        case "PORTER":
-            beerContainer(porter);
-            nextPurchase();
-            break;
-        case "IPA":
-            beerContainer(ipa);
-            nextPurchase();
-            break;
-        default:
-            alert("Esta cerveza no forma parte de nuestro catalogo");
-            break;
-    }
-}while(toBuy);
+// do{
+//     beer = prompt("Indícanos que cerveza deseas adquirir:\nScottish | Golden | Dorada Pampeana | Porter | Ipa").toUpperCase();
+//     switch(beer){
+//         case "SCOTTISH":
+//             beerContainer(scottish);
+//             nextPurchase();
+//             break;
+//         case "GOLDEN":
+//             beerContainer(golden);
+//             nextPurchase();
+//             break;
+//         case "DORADA PAMPEANA":
+//             beerContainer(doradaPampeana);
+//             nextPurchase();
+//             break;
+//         case "PORTER":
+//             beerContainer(porter);
+//             nextPurchase();
+//             break;
+//         case "IPA":
+//             beerContainer(ipa);
+//             nextPurchase();
+//             break;
+//         default:
+//             alert("Esta cerveza no forma parte de nuestro catalogo");
+//             break;
+//     }
+// }while(toBuy);
 
 function beerContainer(howBeer){
     container = prompt("Indíquenos el envase que desea:\nBOTELLA | BARRIL").toUpperCase();//Botella o Barril
@@ -118,33 +118,104 @@ noStock.forEach((noStockList)=>{console.table(noStockList)}
 const total = trolley.reduce((acumulador,priceBeer)=>acumulador + priceBeer.priceBeer,0); //Utilizamos un reduce() para calcular el total de la compra
 const day = new Date;
 // alert("Costo total de: $"+total+"\nSu compra se realizo con éxito hoy: "+ day.toLocaleDateString()); //en el parte del total de la compra incluimos la fecha en que se realizo
-congratulation.innerHTML=`
-    <div class="bg-white mx-auto" style="width:max-content">
-        <b class="fs-4">Felicidades, su compra se ha realizado con éxito.</b><br>
-        <p>Costo total: $${total}</p><br>
-        <p>Fecha de la compra: ${day.toLocaleDateString()}</p><br>
-    </div>`;
+// congratulation.innerHTML=`
+//     <div class="bg-white mx-auto" style="width:max-content">
+//         <b class="fs-4">Felicidades, su compra se ha realizado con éxito.</b><br>
+//         <p>Costo total: $${total}</p><br>
+//         <p>Fecha de la compra: ${day.toLocaleDateString()}</p><br>
+//     </div>`;
 
-listProducts.innerHTML = `<b class="bg-dark text-white" style="width:max-content">LISTA DE PRODUCTOS</b>`;
-for (let buyReady of trolley){
-    listProducts.innerHTML+=`<p class="bg-white mx-auto text-center" style="width:max-content"><b>${buyReady.style}</b> = ${buyReady.priceBeer}</p><br>`
-}
+// listProducts.innerHTML = `<b class="bg-dark text-white" style="width:max-content">LISTA DE PRODUCTOS</b>`;
+// for (let buyReady of trolley){
+//     listProducts.innerHTML+=`<p class="bg-white mx-auto text-center" style="width:max-content"><b>${buyReady.style}</b> = ${buyReady.priceBeer}</p><br>`
+// }
 
 //CREAMOS MEDIANTE EL DOM 4 CARDS QUE REPRESENTAN LOS 4 TIPOS DE CONTAINER QUE LA EMPRESA OFRECE
 //El Plan es luego mediante eventos, al hacer click en uno de ellos, abrir un formulario y que la compra se agregue al carrito
 
 let body = document.getElementsByTagName("body");
 let products = document.createElement("div");
-const allProducts = [["Botella 500cc","bottle500.jpeg"],["Barril 20lts","barrel20.jpeg"],["Barril 30lts","barrel30.jpeg"],["Barril 50lts","barrel50.jpeg"]];
+const allProducts = [["Botella 500cc","bottle500.jpeg","btn500cc"],["Barril 20lts","barrel20.jpeg","btn20lts"],["Barril 30lts","barrel30.jpeg","btn30lts"],["Barril 50lts","barrel50.jpeg","btn50lts"]];
 products.className = "d-flex flex-row justify-content-evenly m-3";
 for(const pro of allProducts){
     products.innerHTML+=`
     <div class="card" style="width: 18rem;">
     <img src="../assets/img/container/${pro[1]}" class="card-img-top" alt="${pro[0]}">
-    <div class="card-body">
+    <div class="card-body d-flex flex-column align-items-center">
       <h5 class="card-title">${pro[0]}</h5>
-      <a href="#" class="btn btn-primary">QUIERO!</a>
+      <a href="#formBuy" class="btn btn-primary" id="${pro[2]}">QUIERO!</a> 
     </div>
-  </div>`;
+  </div>`;//Agregamos un ID a cada btn para poder trabajar los eventos de cada uno
 }
 document.body.append(products);
+
+//SELECCIONAMOS CADA BOTON POR SU ID PARA PODER ESCUCHARLOS DE MANERA PERSONALIZADA
+let btn500cc = document.getElementById("btn500cc");
+let btn20lts = document.getElementById("btn20lts");
+let btn30lts = document.getElementById("btn30lts");
+let btn50lts = document.getElementById("btn50lts");
+
+//Creamos un elemento buyForm donde almacenaremos un formulario de compra para cada vez que querramos agregar algo al carrito luego de seleccionar el envase que querramos adquirir
+let buyForm = document.createElement("div");
+document.body.append(buyForm);
+
+//function que crea un formulario de compra
+function purchaseForm(howContainer){
+    buyForm.innerHTML=`
+    <div >
+        <form action="" id="formBuy" class="bg-secondary d-flex flex-column align-items-center p-5 w-50 mb-5 border border-3 border-light rounded-3 mx-auto" style="position:fixed; top:30%; left:25%">
+        <h2>${howContainer}</h2>
+        <div class="d-flex justify-content-evenly m-3 p-5">
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="scottish">
+            <label class="form-check-label" for="inlineRadio1">SCOTTISH</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="golden">
+            <label class="form-check-label" for="inlineRadio2">GOLDEN</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="doradaPampeana">
+            <label class="form-check-label" for="inlineRadio3">DORADA PAMPEANA</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio4" value="porter">
+            <label class="form-check-label" for="inlineRadio4">PORTER</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio5" value="ipa">
+            <label class="form-check-label" for="inlineRadio5">IPA</label>
+        </div>
+        </div>
+        <div class="m-4">
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1">N°</span>
+            <input type="number" id="cantidadDeUnidades" class="form-control w-20" placeholder="Cantidad de unidades" aria-label="cantidad" aria-describedby="basic-addon1">
+        </div>
+        </div>
+        <button type="submit" class="btn btn-primary w-20">Al Carrito</button>
+        </form>
+    </div>
+    `
+}
+
+
+//Seleccionamos cada boton para ejecutar un evento
+btn500cc.onclick = () =>{products.setAttribute("style","filter:blur(5px);transition:1s");
+                        purchaseForm("Packs x 12 Botellas de 500cc");}
+btn20lts.onclick = () =>{products.setAttribute("style","filter:blur(5px);transition:1s");
+                        purchaseForm("Barriles 20lts")};
+btn30lts.onclick = () =>{products.setAttribute("style","filter:blur(5px);transition:1s");
+                        purchaseForm("Barriles 30lts")};
+btn50lts.onclick = () =>{products.setAttribute("style","filter:blur(5px);transition:1s");
+                        purchaseForm("Barriles 50lts")};
+
+//Creamos un almacenador de productos agregados al Carrito
+let cartStorage = document.createElement("div");
+document.body.append(cartStorage);
+
+let cantidad = document.getElementById("cantidadDeUnidades");
+cantidad.addEventListener('keyup',(e)=>{
+    let count=console.log(e.path[0].value);
+    cartStorage.innerHTML=count
+})
