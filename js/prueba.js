@@ -79,12 +79,13 @@ styleBeer.onchange = ()=>{
         styleBeerValue = styleBeer.value;
         containerBeerValue = containerBeer.value;
         price.innerHTML=cerveza[styleBeerValue][containerBeerValue];
-        amount.onchange =() =>{
-            totalPrice.innerHTML=cerveza[styleBeerValue][containerBeerValue]*amount.value;
-        }
+        totalPrice.innerHTML=cerveza[styleBeerValue][containerBeerValue]*amount.value;
+
     }
 }
-
+amount.onchange =() =>{
+    totalPrice.innerHTML=cerveza[styleBeerValue][containerBeerValue]*amount.value;
+}
 
 //Creamos un almacenador del carrito
 let trolley = document.createElement("div");
