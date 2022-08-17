@@ -13,6 +13,8 @@ const scottish = new BeerPrice(1724,3448,4619,6705,11175);
 const porter = new BeerPrice(1724,3448,4619,6705,11175);
 const ipa = new BeerPrice(1771,3542,5022,7290,12150);
 
+const cerveza = {doradaPampeana:doradaPampeana,golden:golden,scottish:scottish,porter:porter,ipa:ipa};
+
 //Seleccionamos el body para utilizarlo con el DOM
 let body = document.getElementsByTagName("body");
 
@@ -54,7 +56,7 @@ tableTitle.innerHTML=`
                 </select>
             </div>
         </td>
-        <td class="px-3"><input type="number" value="0" id="unidades"></td>
+        <td class="px-3"><input type="number" value="1" min="1" id="unidades"></td>
         <td class="px-3" id="precio"></td>
         <td class="px-3" id="precioTotal"></td>
         <td class="px-3"><button type="button" class="btn btn-success agregar" id="btn-agregar">👍</button></td> 
@@ -76,33 +78,36 @@ styleBeer.onchange = ()=>{
         containerBeerVal = containerBeer.options[containerBeer.selectedIndex].text;
         styleBeerValue = styleBeer.value;
         containerBeerValue = containerBeer.value;
-        price.innerHTML=styleBeerValue.containerBeerValue;
+        price.innerHTML=cerveza[styleBeerValue][containerBeerValue];
+        amount.onchange =() =>{
+            totalPrice.innerHTML=cerveza[styleBeerValue][containerBeerValue]*amount.value;
+        }
     }
 }
+
 
 //Creamos un almacenador del carrito
 let trolley = document.createElement("div");
 trolley.className ="container text-center";
+let divTrolley = document.createElement("div");
+divTrolley.className="row";
 document.body.append(trolley);
+trolley.append(divTrolley);
 const listTrolley = [];
+
 
 let agregar = document.getElementById("btn-agregar");
 let borrar;
 agregar.onclick = () =>{
-    listTrolley.push(    trolley.innerHTML+=`
-        <div class="row">
-            <div class="card col-4" style="width: 18rem;">
-                <div class=" card-body">
-                    <h5 class="card-title">${styleBeerVal}</h5>
-                    <p class="card-text">${containerBeerVal}</p>
-                    <button type="button" class="btn btn-danger borrar">QUITAR</button>
-                </div>
-         </div>
-        </div>
-    `);
-    borrar = document.getElementsByClassName("borrar");
-    borrar.onchange = ()=>{
-        
-    }
-
+    listTrolley.push({estilo:styleBeerVal,envase:containerBeerVal});
+    console.log(listTrolley);
 }
+
+listTrolley.forEach(agregar=>divTrolley.innerHTML+=`
+    <div class="card col-4" style="width: 18rem;">
+        <div class=" card-body">
+            <h5 class="card-title">${agregar.estilo}</h5>
+            <p class="card-text">${agregar.envase}</p>
+            <button type="button" class="btn btn-danger borrar">QUITAR</button>
+        </div>
+ </div>`);
