@@ -20,7 +20,7 @@ let body = document.getElementsByTagName("body");
 
 //Creamos una tabla de compras
 let tableTitle = document.createElement("table");
-tableTitle.setAttribute("style","background:#8F8F8F; color:black; margin:auto; margin-bottom:5em; border-radius:5px")
+tableTitle.setAttribute("style","background:#8F8F8F; color:black; margin:auto; margin-bottom:2em; border-radius:5px")
 document.body.appendChild(tableTitle);
 tableTitle.innerHTML=`
     <tr>
@@ -98,17 +98,29 @@ const listTrolley = [];
 
 
 let agregar = document.getElementById("btn-agregar");
-let borrar;
-agregar.onclick = () =>{
-    listTrolley.push({estilo:styleBeerVal,envase:containerBeerVal});
-    console.log(listTrolley);
-}
-
-listTrolley.forEach(agregar=>divTrolley.innerHTML+=`
-    <div class="card col-4" style="width: 18rem;">
+let borrar = (index)=>{
+    listTrolley.splice(index,1)
+    divTrolley.innerHTML=``;
+    listTrolley.forEach((agregar,index)=>divTrolley.innerHTML+=`
+    <div class="card col-4 mb-3" style="width: 18rem;">
         <div class=" card-body">
             <h5 class="card-title">${agregar.estilo}</h5>
             <p class="card-text">${agregar.envase}</p>
-            <button type="button" class="btn btn-danger borrar">QUITAR</button>
+            <button type="button" class="btn btn-danger borrar" onclick="borrar(${index})">QUITAR</button>
         </div>
- </div>`);
+ </div>`); 
+}
+
+agregar.onclick = () =>{
+    listTrolley.push({estilo:styleBeerVal,envase:containerBeerVal});
+    divTrolley.innerHTML=``;
+    listTrolley.forEach((agregar,index)=>divTrolley.innerHTML+=`
+    <div class="card col-4 mb-3" style="width: 18rem;">
+        <div class=" card-body">
+            <h5 class="card-title">${agregar.estilo}</h5>
+            <p class="card-text">${agregar.envase}</p>
+            <button type="button" class="btn btn-danger borrar" onclick="borrar(${index})" id="${index}">QUITAR</button>
+        </div>
+ </div>`); 
+}
+
