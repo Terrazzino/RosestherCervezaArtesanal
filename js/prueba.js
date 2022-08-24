@@ -123,4 +123,3 @@ agregar.onclick = () =>{
         </div>
  </div>`); 
 }
-
