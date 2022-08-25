@@ -13,7 +13,6 @@ const golden = new BeerPrice(1638,3276,4340,6300,10500,"../assets/img/shop/2.jpg
 const scottish = new BeerPrice(1724,3448,4619,6705,11175,"../assets/img/shop/3.jpg");
 const porter = new BeerPrice(1724,3448,4619,6705,11175,"../assets/img/shop/4.jpg");
 const ipa = new BeerPrice(1771,3542,5022,7290,12150,"../assets/img/shop/5.jpg");
-
 const cerveza = {doradaPampeana:doradaPampeana,golden:golden,scottish:scottish,porter:porter,ipa:ipa};
 
 //Seleccionamos el body para utilizarlo con el DOM
@@ -87,6 +86,9 @@ tableTitle.innerHTML=`
     let total = [];
 
 styleBeer.onchange = ()=>{
+    price.innerHTML=``;
+    totalPrice.innerHTML=``;
+    containerBeer.value=`inicio`;
     styleBeerVal = styleBeer.options[styleBeer.selectedIndex].text;
     containerBeer.removeAttribute("disabled");
     containerBeer.onchange = ()=>{
@@ -96,10 +98,11 @@ styleBeer.onchange = ()=>{
         styleBeerValue = styleBeer.value;
         containerBeerValue = containerBeer.value;
         imageBeer =cerveza [styleBeerValue].image;
-        price.innerHTML=cerveza[styleBeerValue][containerBeerValue];
-        totalPrice.innerHTML=cerveza[styleBeerValue][containerBeerValue]*amount.value;
+        price.innerHTML=`$${cerveza[styleBeerValue][containerBeerValue]}`;
+        totalPrice.innerHTML=`$${cerveza[styleBeerValue][containerBeerValue]*amount.value}`;
     }
-}
+};
+
 amount.onchange =() =>{
     cantidad=amount.value;
     totalPrice.innerHTML=cerveza[styleBeerValue][containerBeerValue]*cantidad;
@@ -120,6 +123,7 @@ const listTrolley = [];
 
 
 let borrar = (index)=>{
+    sumador=0;
     listTrolley.splice(index,1);
     divTrolley.innerHTML=``;
     listTrolley.forEach((agregar,index)=>divTrolley.innerHTML+=`
@@ -135,6 +139,10 @@ let borrar = (index)=>{
  for (let i=0; i<total.length ; i++){
     sumador -= total[i].precioTotal;
 };
+
+//TERNARIO aplicado para que el resultado total al quitar elementos no sea negativo; encontre el problema de que la resta se realiza correctamente pero por alguna razon me colocaba un signo menos adelante del numero, y asi lo solucione
+sumador<0?sumador=sumador*-1:sumador=sumador;
+
 precioFinal.innerHTML=`$${sumador}`;
 precioEnPantalla.innerHTML=`
 <h3 class="text-center text-white">PRECIO TOTAL</h3>
@@ -143,6 +151,7 @@ precioEnPantalla.innerHTML=`
 }
 
 agregar.onclick = () =>{
+    sumador=0;
     listTrolley.push({estilo:styleBeerVal,envase:containerBeerVal,img:imageBeer});
     divTrolley.innerHTML=``;
     listTrolley.forEach((agregar,index)=>divTrolley.innerHTML+=`
@@ -215,14 +224,9 @@ formBuy.innerHTML=`
 </div>
 `;
 
-let botonCompra = document.getElementById("botonCompra");
-let listaCompra = document.getElementById("listaCompra");
-let precioFinal = document.getElementById("precioFinal");
-let compraFinal = document.getElementById("compraFinal");
-// let sumador = 0;
-
 
 botonCompra.onclick = () =>{
+    listaCompra.innerHTML=``;
     total.forEach((producto,index)=>listaCompra.innerHTML+=`
     <tr id="${index}">
         <td class="px-3">${producto.estilo}</td>
@@ -237,12 +241,4 @@ compraFinal.onclick =()=>{
     localStorage.setItem("fecha",JSON.stringify(new Date));
     localStorage.setItem(`productos`,JSON.stringify(total));
     console.log(localStorage.getItem(`productos`));
-
-    // for (let i=0; i<total.length; i++){
-    //     localStorage.setItem(`producto ${i}`,`Adquirio ${total[i].cantidadElegida} ${total[i].estilo} en ${total[i].envase} a $${total[i].precioTotal}`)
-    //     let listaDeStorage = JSON.stringify(localStorage.getItem(`producto ${i}`));
-    //     console.log(listaDeStorage);
-    // }  
 }
-
-//estilo:styleBeerVal,envase:containerBeerVal,cantidadElegida:cantidad,precioTotal:cerveza[styleBeerValue][containerBeerValue]*amount.value}
