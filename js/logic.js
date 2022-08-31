@@ -15,6 +15,14 @@ const porter = new BeerPrice(1724,3448,4619,6705,11175,"../assets/img/shop/4.jpg
 const ipa = new BeerPrice(1771,3542,5022,7290,12150,"../assets/img/shop/5.jpg");
 const cerveza = {doradaPampeana:doradaPampeana,golden:golden,scottish:scottish,porter:porter,ipa:ipa};
 
+
+const DateTime = luxon.DateTime
+let today = DateTime.now();
+let deliveryDay = today.plus({ days: 7 }).toISODate();
+
+
+
+
 //Seleccionamos el body para utilizarlo con el DOM
 let body = document.getElementsByTagName("body");
 
@@ -74,7 +82,7 @@ tableTitle.innerHTML=`
     let totalPrice = document.getElementById("precioTotal")
     let price = document.getElementById("precio");
     let containerBeer = document.getElementById("containerBeer");
-    agregar.setAttribute("disabled","true")
+    agregar.setAttribute("disabled","true");
     containerBeer.setAttribute("disabled","true");
     amount.setAttribute("disabled","true");
     let styleBeerVal;
@@ -91,6 +99,8 @@ styleBeer.onchange = ()=>{
     containerBeer.value=`inicio`;
     styleBeerVal = styleBeer.options[styleBeer.selectedIndex].text;
     containerBeer.removeAttribute("disabled");
+    agregar.setAttribute("disabled","true");
+    amount.setAttribute("disabled","true");
     containerBeer.onchange = ()=>{
         amount.removeAttribute("disabled")
         agregar.removeAttribute("disabled")
@@ -107,6 +117,9 @@ amount.onchange =() =>{
     cantidad=amount.value;
     totalPrice.innerHTML=cerveza[styleBeerValue][containerBeerValue]*cantidad;
 }
+
+
+
 let sumador = 0;
 let precioEnPantalla = document.createElement("div");
 document.body.append(precioEnPantalla);
@@ -151,6 +164,7 @@ precioEnPantalla.innerHTML=`
 }
 
 agregar.onclick = () =>{
+    botonCompra.removeAttribute("disabled");
     sumador=0;
     listTrolley.push({estilo:styleBeerVal,envase:containerBeerVal,img:imageBeer});
     divTrolley.innerHTML=``;
@@ -216,7 +230,7 @@ formBuy.innerHTML=`
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Seguir agregando</button>
-            <button type="submit" class="btn btn-primary" id="compraFinal">Comprar</button>
+            <input type="submit" href="#" class="btn btn-primary" id="compraFinal" value="COMPRAR">
         </div>
         </div>
     </div>
@@ -224,6 +238,7 @@ formBuy.innerHTML=`
 </div>
 `;
 
+botonCompra.setAttribute("disabled","true")
 
 botonCompra.onclick = () =>{
     listaCompra.innerHTML=``;
@@ -232,7 +247,7 @@ botonCompra.onclick = () =>{
         <td class="px-3">${producto.estilo}</td>
         <td class="px-3">${producto.envase}</td>
         <td class="px-3">${producto.cantidadElegida}</td>
-        <td class="px-3">${producto.precioTotal}</td>
+        <td class="px-3">$${producto.precioTotal}</td>
         <br>
     </tr>
     `);
@@ -241,4 +256,38 @@ compraFinal.onclick =()=>{
     localStorage.setItem("fecha",JSON.stringify(new Date));
     localStorage.setItem(`productos`,JSON.stringify(total));
     console.log(localStorage.getItem(`productos`));
+    const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+          confirmButton: 'btn btn-success',
+          cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: false
+      })
+      
+      swalWithBootstrapButtons.fire({
+        title: 'Estas seguro?',
+        text: "Si quieres cancelar la compra, este es el mejor momento!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Estoy seguro',
+        cancelButtonText: 'Cancelar',
+        reverseButtons: true,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          swalWithBootstrapButtons.fire(
+            'Felicidades!',
+            `Su producto llegara aproximadamente el ${deliveryDay[8]+deliveryDay[9]+"/"+deliveryDay[5]+deliveryDay[6]+"/"+deliveryDay[0]+deliveryDay[1]+deliveryDay[2]+deliveryDay[3]}`,
+            'success'
+          )
+        } else if (
+          /* Read more about handling dismissals below */
+          result.dismiss === Swal.DismissReason.cancel
+        ) {
+          swalWithBootstrapButtons.fire(
+            'Cancelada',
+            'Su compra se a cancelado',
+            'error'
+          )
+        }
+      })
 }
