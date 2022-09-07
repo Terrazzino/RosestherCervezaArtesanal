@@ -1,0 +1,47 @@
+[
+    {
+        "estilo": "Dorada Pampeana",
+        "pack6": 1560,
+        "pack12": 3120,
+        "lts20": 4185,
+        "lts30": 6075,
+        "lts50":10125,
+        "img":"../assets/img/shop/1.jpg"
+    },
+    {
+        "estilo": "Golden",
+        "pack6": 1638,
+        "pack12": 3276,
+        "lts20": 4340,
+        "lts30": 6300,
+        "lts50":10500,
+        "img":"../assets/img/shop/2.jpg"
+    },
+    {
+        "estilo": "Scottish",
+        "pack6": 1724,
+        "pack12": 3448,
+        "lts20": 4619,
+        "lts30": 6705,
+        "lts50":11175,
+        "img":"../assets/img/shop/3.jpg"
+    },
+    {
+        "estilo": "Porter",
+        "pack6": 1724,
+        "pack12": 3448,
+        "lts20": 4619,
+        "lts30": 6705,
+        "lts50":11175,
+        "img":"../assets/img/shop/4.jpg"
+    },
+    {
+        "estilo": "Ipa",
+        "pack6": 1771,
+        "pack12": 3542,
+        "lts20": 5022,
+        "lts30": 7290,
+        "lts50":12150,
+        "img":"../assets/img/shop/1.jpg"
+    }
+]

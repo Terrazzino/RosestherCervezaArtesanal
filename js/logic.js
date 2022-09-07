@@ -8,18 +8,21 @@ class BeerPrice{
         this.image = image
     }
 }
-const doradaPampeana = new BeerPrice(1560,3120,4185,6075,10125,"../assets/img/shop/1.jpg");
-const golden = new BeerPrice(1638,3276,4340,6300,10500,"../assets/img/shop/2.jpg");
-const scottish = new BeerPrice(1724,3448,4619,6705,11175,"../assets/img/shop/3.jpg");
-const porter = new BeerPrice(1724,3448,4619,6705,11175,"../assets/img/shop/4.jpg");
-const ipa = new BeerPrice(1771,3542,5022,7290,12150,"../assets/img/shop/5.jpg");
+//PRECIOS EN DOLAR PARA MANTENER LOS PRECIOS ACTUALIZADOS EN RELACIÓN A LA API
+const doradaPampeana = new BeerPrice(5.86,11.72,15.73,22.83,38.06,"../assets/img/shop/1.jpg");
+const golden = new BeerPrice(6.15,12.31,16.31,23.68,39.47,"../assets/img/shop/2.jpg");
+const scottish = new BeerPrice(6.48,12.96,17.36,25.20,42.01,"../assets/img/shop/3.jpg");
+const porter = new BeerPrice(6.48,12.96,17.36,25.20,42.01,"../assets/img/shop/4.jpg");
+const ipa = new BeerPrice(6.62,13.31,18.87,27.40,45.67,"../assets/img/shop/5.jpg");
 const cerveza = {doradaPampeana:doradaPampeana,golden:golden,scottish:scottish,porter:porter,ipa:ipa};
 
+// let stringy = JSON.stringify(doradaPampeana);
+// let parse = JSON.parse(stringy);
+let dolar;
 
-const DateTime = luxon.DateTime
+const DateTime = luxon.DateTime;
 let today = DateTime.now();
 let deliveryDay = today.plus({ days: 7 }).toISODate();
-
 
 
 
@@ -93,33 +96,6 @@ tableTitle.innerHTML=`
     let imageBeer;
     let total = [];
 
-styleBeer.onchange = ()=>{
-    price.innerHTML=``;
-    totalPrice.innerHTML=``;
-    containerBeer.value=`inicio`;
-    styleBeerVal = styleBeer.options[styleBeer.selectedIndex].text;
-    containerBeer.removeAttribute("disabled");
-    agregar.setAttribute("disabled","true");
-    amount.setAttribute("disabled","true");
-    containerBeer.onchange = ()=>{
-        amount.removeAttribute("disabled")
-        agregar.removeAttribute("disabled")
-        containerBeerVal = containerBeer.options[containerBeer.selectedIndex].text;
-        styleBeerValue = styleBeer.value;
-        containerBeerValue = containerBeer.value;
-        imageBeer =cerveza [styleBeerValue].image;
-        price.innerHTML=`$${cerveza[styleBeerValue][containerBeerValue]}`;
-        totalPrice.innerHTML=`$${cerveza[styleBeerValue][containerBeerValue]*amount.value}`;
-    }
-};
-
-amount.onchange =() =>{
-    cantidad=amount.value;
-    totalPrice.innerHTML=cerveza[styleBeerValue][containerBeerValue]*cantidad;
-}
-
-
-
 let sumador = 0;
 let precioEnPantalla = document.createElement("div");
 document.body.append(precioEnPantalla);
@@ -156,6 +132,8 @@ let borrar = (index)=>{
 //TERNARIO aplicado para que el resultado total al quitar elementos no sea negativo; encontre el problema de que la resta se realiza correctamente pero por alguna razon me colocaba un signo menos adelante del numero, y asi lo solucione
 sumador<0?sumador=sumador*-1:sumador=sumador;
 
+
+
 precioFinal.innerHTML=`$${sumador}`;
 precioEnPantalla.innerHTML=`
 <h3 class="text-center text-white">PRECIO TOTAL</h3>
@@ -177,15 +155,15 @@ agregar.onclick = () =>{
             <button type="button" class="btn btn-danger borrar" onclick="borrar(${index})"">QUITAR</button>
         </div>
  </div>`); 
- total.push({estilo:styleBeerVal,envase:containerBeerVal,cantidadElegida:cantidad,precioTotal:cerveza[styleBeerValue][containerBeerValue]*amount.value});
+ total.push({estilo:styleBeerVal,envase:containerBeerVal,cantidadElegida:cantidad,precioTotal:cerveza[styleBeerValue][containerBeerValue]*amount.value*dolar});
 
 for (let i=0; i<total.length ; i++){
     sumador += total[i].precioTotal;
 };
-precioFinal.innerHTML=`$${sumador}`;
+precioFinal.innerHTML=`$${sumador.toFixed(2)}`;
 precioEnPantalla.innerHTML=`
 <h3 class="text-center text-white">PRECIO TOTAL</h3>
-<h4 class="text-center text-success">$${sumador}</h4>
+<h4 class="text-center text-success">$${sumador.toFixed(2)}</h4>
 `
 };
 
@@ -206,11 +184,11 @@ formBuy.innerHTML=`
             <form>
             <div class="mb-3">
             <label for="recipient-name" class="col-form-label">Nombre y Apellido:</label>
-            <input type="text" class="form-control" id="recipient-name">
+            <input type="text" class="form-control yourName" id="recipient-name">
         </div>
             <div class="mb-3">
                 <label for="recipient-name" class="col-form-label">Su Email:</label>
-                <input type="email" class="form-control" id="recipient-name">
+                <input type="email" class="form-control yourMail" id="recipient-mail">
             </div>
             <div class="mb-3">
                 <table id="listaCompra">
@@ -240,6 +218,7 @@ formBuy.innerHTML=`
 
 botonCompra.setAttribute("disabled","true")
 
+sumador<=0?botonCompra.setAttribute("disabled","true"):botonCompra.removeAttribute("disabled");
 botonCompra.onclick = () =>{
     listaCompra.innerHTML=``;
     total.forEach((producto,index)=>listaCompra.innerHTML+=`
@@ -247,12 +226,22 @@ botonCompra.onclick = () =>{
         <td class="px-3">${producto.estilo}</td>
         <td class="px-3">${producto.envase}</td>
         <td class="px-3">${producto.cantidadElegida}</td>
-        <td class="px-3">$${producto.precioTotal}</td>
+        <td class="px-3">$${(producto.precioTotal).toFixed(2)}</td>
         <br>
     </tr>
     `);
 }
 compraFinal.onclick =()=>{
+    let theName = document.getElementsByClassName("yourName").value;
+    let theMail = document.getElementsByClassName("yourMail").value;
+    console.log(theName)
+    if(theName==""){
+        alert("No name")
+    }
+    else if (theMail==""){
+        alert("No mail")
+    }
+    else{
     localStorage.setItem("fecha",JSON.stringify(new Date));
     localStorage.setItem(`productos`,JSON.stringify(total));
     console.log(localStorage.getItem(`productos`));
@@ -290,4 +279,41 @@ compraFinal.onclick =()=>{
           )
         }
       })
+    }
+
+
 }
+
+
+//DENTRO DE LA FUNCION CONVERSOR DOLAR PEDIMOS A UNA API EL VALOR DEL DOLAR ACTUALIZADO PARA CON ESE VALOR MANTENER ACTUALIZADO LOS PRECIOS DE MIS PRODUCTOS
+async function conversorDolar(){
+    const apiDolar = await fetch("https://api-dolar-argentina.herokuapp.com/api/dolarblue")
+    const dolarJson = await apiDolar.json()
+    dolar = parseInt(dolarJson.venta).toFixed(2)
+
+    styleBeer.onchange = ()=>{
+        price.innerHTML=``;
+        totalPrice.innerHTML=``;
+        containerBeer.value=`inicio`;
+        styleBeerVal = styleBeer.options[styleBeer.selectedIndex].text;
+        containerBeer.removeAttribute("disabled");
+        agregar.setAttribute("disabled","true");
+        amount.setAttribute("disabled","true");
+        containerBeer.onchange = ()=>{
+            amount.removeAttribute("disabled")
+            agregar.removeAttribute("disabled")
+            containerBeerVal = containerBeer.options[containerBeer.selectedIndex].text;
+            styleBeerValue = styleBeer.value;
+            containerBeerValue = containerBeer.value;
+            imageBeer =cerveza [styleBeerValue].image;
+            price.innerHTML=`$${(cerveza[styleBeerValue][containerBeerValue]*dolar).toFixed(2)}`;
+            totalPrice.innerHTML=`$${(cerveza[styleBeerValue][containerBeerValue]*amount.value*dolar).toFixed(2)}`;
+        }
+    };
+    amount.onchange =() =>{
+        cantidad=amount.value;
+        totalPrice.innerHTML=`$${(cerveza[styleBeerValue][containerBeerValue]*cantidad*dolar).toFixed(2)}`;
+    }
+}
+
+conversorDolar()
