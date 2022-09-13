@@ -16,10 +16,10 @@ const porter = new BeerPrice(6.48,12.96,17.36,25.20,42.01,"../assets/img/shop/4.
 const ipa = new BeerPrice(6.62,13.31,18.87,27.40,45.67,"../assets/img/shop/5.jpg");
 const cerveza = {doradaPampeana:doradaPampeana,golden:golden,scottish:scottish,porter:porter,ipa:ipa};
 
-// let stringy = JSON.stringify(doradaPampeana);
-// let parse = JSON.parse(stringy);
+//Guardamos el valor del dolar actual en la variable dolar
 let dolar;
 
+//Utilizamos Luxon para avisar que 7 dias despues de la compra del producto llegara el producto
 const DateTime = luxon.DateTime;
 let today = DateTime.now();
 let deliveryDay = today.plus({ days: 7 }).toISODate();
@@ -74,11 +74,6 @@ tableTitle.innerHTML=`
     </tr>
 `;
 
-
-
-
-
-
     let agregar = document.getElementById("btn-agregar");
     let styleBeer = document.getElementById("styleBeer");
     let amount = document.getElementById("unidades");
@@ -110,7 +105,7 @@ trolley.append(divTrolley);
 const listTrolley = [];
 
 
-
+//FUNCION PARA BORRAR ELEMENTOS DEL CARRITO
 let borrar = (index)=>{
     sumador=0;
     listTrolley.splice(index,1);
@@ -133,14 +128,16 @@ let borrar = (index)=>{
 sumador<0?sumador=sumador*-1:sumador=sumador;
 
 
-
+//PRESENTACION EN PANTALLA DEL PRECIO TOTAL DE COMPRA
 precioFinal.innerHTML=`$${sumador}`;
 precioEnPantalla.innerHTML=`
 <h3 class="text-center text-white">PRECIO TOTAL</h3>
 <h4 class="text-center text-success">$${sumador}</h4>
-`
+`;
+sumador<=0?botonCompra.setAttribute("disabled","true"):botonCompra.removeAttribute("disabled")
 }
 
+//AGREGAR PRODUCTOS AL CARRITO
 agregar.onclick = () =>{
     botonCompra.removeAttribute("disabled");
     sumador=0;
@@ -167,58 +164,57 @@ precioEnPantalla.innerHTML=`
 `
 };
 
+//Formulario obligatorio para comprar los productos
 let formBuy = document.createElement("div");
 document.body.append(formBuy);
 formBuy.innerHTML=`
 <div class="d-grid gap-2 col-2 mx-auto mb-4">
     <button type="button" class="btn btn-success" id="botonCompra" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">REALIZAR MI COMPRA</button>
-
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Necesitamos solo algunos datos</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <form>
-            <div class="mb-3">
-            <label for="recipient-name" class="col-form-label">Nombre y Apellido:</label>
-            <input type="text" class="form-control yourName" id="recipient-name">
-        </div>
-            <div class="mb-3">
-                <label for="recipient-name" class="col-form-label">Su Email:</label>
-                <input type="email" class="form-control yourMail" id="recipient-mail">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Necesitamos solo algunos datos</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form class="formCompras" onsubmit="return false">
+                        <div class="mb-3">
+                            <label for="exampleInputText1" class="form-label">Nombre y Apellido</label>
+                            <input type="text" class="form-control" id="exampleInputText1">
+                        </div>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="E-mail" aria-label="Recipient's username" aria-describedby="basic-addon2" id="exampleInputEmail1">
+                            <span class="input-group-text" id="basic-addon2">@gmail.com</span>
+                        </div>
+                        <div class="mb-3">
+                            <table id="listaCompra">
+                                <tr>
+                                    <th class="px-3">Estilo</th>
+                                    <th class="px-3">Envase</th>
+                                    <th class="px-3">Cantidad</th>
+                                    <th class="px-3">Precio</th>
+                                </tr>
+                            </table>
+                         </div>
+                         <div class="mb-3">
+                             <h4 class="text-center">PRECIO TOTAL:</h4>
+                             <h3 class="text-center"><b id="precioFinal"></b></h3>
+                         </div>
+                        <button type="submit" class="btn btn-primary" id="compraFinal">COMPRAR</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Seguir agregando</button>
+                    </form>
+                </div>
             </div>
-            <div class="mb-3">
-                <table id="listaCompra">
-                    <tr>
-                        <th class="px-3">Estilo</th>
-                        <th class="px-3">Envase</th>
-                        <th class="px-3">Cantidad</th>
-                        <th class="px-3">Precio</th>
-                    </tr>
-                </table>
-            </div>
-            <div class="mb-3">
-            <h4 class="text-center">PRECIO TOTAL:</h4>
-            <h3 class="text-center"><b id="precioFinal"></b></h3>
-        </div>
-            </form>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Seguir agregando</button>
-            <input type="submit" href="#" class="btn btn-primary" id="compraFinal" value="COMPRAR">
-        </div>
         </div>
     </div>
-    </div>
-</div>
-`;
+</div>`;
 
-botonCompra.setAttribute("disabled","true")
+botonCompra.setAttribute("disabled","true");
+let formCompras = document.getElementById("formCompras"); 
+let inputEmail = document.getElementById("exampleInputEmail1");
+let inputName = document.getElementById("exampleInputText1");
 
-sumador<=0?botonCompra.setAttribute("disabled","true"):botonCompra.removeAttribute("disabled");
 botonCompra.onclick = () =>{
     listaCompra.innerHTML=``;
     total.forEach((producto,index)=>listaCompra.innerHTML+=`
@@ -232,56 +228,22 @@ botonCompra.onclick = () =>{
     `);
 }
 compraFinal.onclick =()=>{
-    let theName = document.getElementsByClassName("yourName").value;
-    let theMail = document.getElementsByClassName("yourMail").value;
-    console.log(theName)
-    if(theName==""){
-        alert("No name")
+    if(inputName.value!=""&&inputEmail.value!=""){
+        localStorage.setItem("fecha",JSON.stringify(new Date));
+        localStorage.setItem(`productos`,JSON.stringify(total));
+        console.log(localStorage.getItem(`productos`));
+          Swal.fire({
+            title: 'Felicidades!',
+            text: `Su producto llegara aproximadamente el ${deliveryDay[8]+deliveryDay[9]+"/"+deliveryDay[5]+deliveryDay[6]+"/"+deliveryDay[0]+deliveryDay[1]+deliveryDay[2]+deliveryDay[3]}`,
+            icon: 'success',
+          })
+    }else{
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'No rellenaste correctamente el formulario obligatorio!'
+          })
     }
-    else if (theMail==""){
-        alert("No mail")
-    }
-    else{
-    localStorage.setItem("fecha",JSON.stringify(new Date));
-    localStorage.setItem(`productos`,JSON.stringify(total));
-    console.log(localStorage.getItem(`productos`));
-    const swalWithBootstrapButtons = Swal.mixin({
-        customClass: {
-          confirmButton: 'btn btn-success',
-          cancelButton: 'btn btn-danger'
-        },
-        buttonsStyling: false
-      })
-      
-      swalWithBootstrapButtons.fire({
-        title: 'Estas seguro?',
-        text: "Si quieres cancelar la compra, este es el mejor momento!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Estoy seguro',
-        cancelButtonText: 'Cancelar',
-        reverseButtons: true,
-      }).then((result) => {
-        if (result.isConfirmed) {
-          swalWithBootstrapButtons.fire(
-            'Felicidades!',
-            `Su producto llegara aproximadamente el ${deliveryDay[8]+deliveryDay[9]+"/"+deliveryDay[5]+deliveryDay[6]+"/"+deliveryDay[0]+deliveryDay[1]+deliveryDay[2]+deliveryDay[3]}`,
-            'success'
-          )
-        } else if (
-          /* Read more about handling dismissals below */
-          result.dismiss === Swal.DismissReason.cancel
-        ) {
-          swalWithBootstrapButtons.fire(
-            'Cancelada',
-            'Su compra se a cancelado',
-            'error'
-          )
-        }
-      })
-    }
-
-
 }
 
 
